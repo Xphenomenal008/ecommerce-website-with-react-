@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Cartshowing } from './store/indec';
 import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 const Header = () => {
     const dispatch=useDispatch()
@@ -18,9 +19,18 @@ return num +item.quantity
   return (
     <div className="flex items-center justify-between px-4 py-2 bg-blue-600 text-white shadow-md">
       {/* Brand Logo */}
-      <div className="text-2xl font-bold tracking-wide">ReduxCart</div>
+    <NavLink to="/">
+    <div className="text-2xl font-bold tracking-wide">ReduxCart</div>
+    </NavLink>
+      
+
+       
+
+      
+       
 
       {/* Cart Section */}
+      <NavLink to="/cart">
       <div className="flex items-center space-x-4">
         <div className="relative">
           <button onClick={clickhandler} className="text-lg cursor-pointer font-medium">My Cart</button>
@@ -31,6 +41,10 @@ return num +item.quantity
           </div>
         </div>
       </div>
+
+      </NavLink>
+      
+
     </div>
   );
 };

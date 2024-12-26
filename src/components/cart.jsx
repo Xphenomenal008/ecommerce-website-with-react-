@@ -1,62 +1,66 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Cartshowing } from './store/indec';
-import { useSelector } from 'react-redux';
 import { CartActions } from './store/indec';
+import { useSelector } from 'react-redux';
 
 const Cart = () => {
-    const dispatch=useDispatch()
-    const items=useSelector((state)=>state.cart.items)
-    const totalamount=useSelector((state)=>state.cart.totalamount)
+    const dispatch = useDispatch();
+    const items = useSelector((state) => state.cart.items);
+    const totalamount = useSelector((state) => state.cart.totalamount);
 
-    const handleClick=()=>{
-        dispatch(Cartshowing.hidemycart())
-    }
+    const handleIncrease = (id, price) => {
+        dispatch(CartActions.additems({ id, price }));
+    };
 
-    const handleincrease=(id,price)=>{
-        dispatch(CartActions.additems({id,price}))
-    }
-    const handledecrease=(id)=>{
-        dispatch(CartActions.removeitems({id}))
-    }
+    const handleDecrease = (id) => {
+        dispatch(CartActions.removeitems({ id }));
+    };
 
-    const ouritem = items.map((item) =>  
-        <li key={item.id}>
-            <div className="bg-white p-4 rounded-lg shadow-md mb-4">
-                <div className="flex justify-between items-center">
-                    {/* Item Details */}
-                    <div className="text-lg font-medium text-gray-700">{item.name}</div>
-    
-                    {/* Price Details */}
-                    <div className="text-right">
-                        <div className="text-xl font-semibold text-gray-800">${Number(item.totalamounteach).toFixed(2)}</div>
-                        <div className="text-sm text-gray-500">${Number(item.price).toFixed(2)}</div>
-                    </div>
-                </div>
-    
-                {/* Quantity and Controls */}
-                <div className="flex justify-between items-center mt-4">
-                    <div className="text-gray-600">Qty: {item.quantity}</div>
-                    <div className="flex space-x-2">
-                        <button onClick={() => handleincrease(item.id, item.price)} className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">+</button>
-                        <button onClick={() => handledecrease(item.id)} className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">-</button>
+    const cartItems = items.map((item) => (
+        <div key={item.id} className="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-lg shadow-md mb-4">
+            <div className="flex-1 sm:mr-4">
+                <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+                <div className="mt-1 text-sm text-gray-600">Unit Price: ${Number(item.price).toFixed(2)}</div>
+                <div className="mt-1 text-sm text-gray-600">Total: ${Number(item.totalamounteach).toFixed(2)}</div>
+            </div>
+            <div className="flex items-center space-x-4 mt-4 sm:mt-0">
+                <button 
+                    onClick={() => handleIncrease(item.id, item.price)} 
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all"
+                >
+                    +
+                </button>
+                <span className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md">Qty: {item.quantity}</span>
+                <button 
+                    onClick={() => handleDecrease(item.id)} 
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all"
+                >
+                    -
+                </button>
+            </div>
+        </div>
+    ));
+
+    return (
+        <div className="min-h-screen bg-gray-100 py-10 px-6">
+            <div className="max-w-3xl mx-auto">
+                <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Your Cart</h1>
+
+                {items.length === 0 ? (
+                    <div className="text-center text-gray-600 text-lg">Your cart is empty. Add some items to get started!</div>
+                ) : (
+                    <div className="space-y-4">{cartItems}</div>
+                )}
+
+                <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+                    <div className="text-xl font-semibold text-gray-800 flex justify-between">
+                        <span>Total Amount:</span>
+                        <span>${Number(totalamount).toFixed(2)}</span>
                     </div>
                 </div>
             </div>
-        </li>
+        </div>
     );
-    
-  return (
-    <div className="fixed top-10 right-10 w-80 bg-gray-100 p-4 rounded-lg shadow-xl border border-gray-200">
-      {/* Cart Heading */}
-      <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Your Cart</h1>
-      <ul className="overflow-y-auto max-h-64">{totalamount === 0 ? "Your cart is empty add something 😏!!" : ouritem}</ul>      
-      <div className='p-3 mt-4 bg-blue-500 text-white text-lg font-semibold rounded-lg text-center'>
-        Total: ${Number(totalamount).toFixed(2)}
-      </div>
-      <button onClick={handleClick} className='w-full mt-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all'>Close</button>
-    </div>
-  );
 };
 
 export default Cart;
